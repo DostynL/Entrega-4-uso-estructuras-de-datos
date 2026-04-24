@@ -38,3 +38,42 @@ println("\nCursos disponibles:")
 for curso in cursos_disponibles
     println("  - $curso")
 end
+
+# Array: calificaciones por estudiante por curso
+# Orden de cursos: Cálculo, Algoritmos, Estadística, Álgebra Lineal, POO
+notas_ana     = [85.0, 90.0, 78.0, 92.0, 88.0]
+notas_carlos  = [70.0, 95.0, 82.0, 75.0, 91.0]
+notas_maria   = [92.0, 88.0, 95.0, 89.0, 84.0]
+notas_diego   = [78.0, 72.0, 88.0, 95.0, 76.0]
+
+# Matrix: tabla general de notas (filas=estudiantes, columnas=cursos)
+matriz_notas = Matrix{Float64}([
+    notas_ana';
+    notas_carlos';
+    notas_maria';
+    notas_diego'
+])
+
+# Nombres de cursos en orden
+cursos_ordenados = ["Cálculo", "Algoritmos", "Estadística", "Álgebra Lineal", "POO"]
+nombres = ["Ana", "Carlos", "María", "Diego"]
+
+println("\n=== TABLA DE CALIFICACIONES ===")
+println(rpad("Estudiante", 12), join(rpad.(cursos_ordenados, 14)))
+for i in 1:4
+    println(rpad(nombres[i], 12), join(rpad.(matriz_notas[i,:], 14)))
+end
+
+# Promedio por estudiante
+println("\n=== PROMEDIOS POR ESTUDIANTE ===")
+for i in 1:4
+    promedio = sum(matriz_notas[i,:]) / length(cursos_ordenados)
+    println("  $(nombres[i]): $(round(promedio, digits=2))")
+end
+
+# Promedio por curso
+println("\n=== PROMEDIO POR CURSO ===")
+for j in 1:length(cursos_ordenados)
+    promedio = sum(matriz_notas[:,j]) / 4
+    println("  $(cursos_ordenados[j]): $(round(promedio, digits=2))")
+end
