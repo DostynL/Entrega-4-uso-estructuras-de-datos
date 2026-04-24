@@ -77,3 +77,38 @@ for j in 1:length(cursos_ordenados)
     promedio = sum(matriz_notas[:,j]) / 4
     println("  $(cursos_ordenados[j]): $(round(promedio, digits=2))")
 end
+
+# ANÁLISIS FINAL: todo interactuando junto ---
+
+println("\n=== MEJOR Y PEOR ESTUDIANTE ===")
+promedios = [sum(matriz_notas[i,:]) / length(cursos_ordenados) for i in 1:4]
+mejor = nombres[argmax(promedios)]
+peor = nombres[argmin(promedios)]
+println("  Mejor promedio: $mejor ($(round(maximum(promedios), digits=2)))")
+println("  Peor promedio:  $peor ($(round(minimum(promedios), digits=2)))")
+
+println("\n=== ESTUDIANTES QUE APROBARON TODO (nota >= 75) ===")
+for i in 1:4
+    aprobó_todo = all(matriz_notas[i,:] .>= 75.0)
+    if aprobó_todo
+        println("  ✓ $(nombres[i])")
+    else
+        reprobados = cursos_ordenados[findall(matriz_notas[i,:] .< 75.0)]
+        println("  ✗ $(nombres[i]) - reprobó: $(join(reprobados, ", "))")
+    end
+end
+
+println("\n=== CURSO MÁS DIFÍCIL Y MÁS FÁCIL ===")
+promedios_cursos = [sum(matriz_notas[:,j]) / 4 for j in 1:length(cursos_ordenados)]
+mas_dificil = cursos_ordenados[argmin(promedios_cursos)]
+mas_facil = cursos_ordenados[argmax(promedios_cursos)]
+println("  Más difícil: $mas_dificil ($(round(minimum(promedios_cursos), digits=2)))")
+println("  Más fácil:   $mas_facil ($(round(maximum(promedios_cursos), digits=2)))")
+
+println("\n=== CARRERAS REPRESENTADAS ===")
+carreras = Set([est.carrera for (_, est) in estudiantes])
+println("  Total de carreras distintas: $(length(carreras))")
+for carrera in carreras
+    alumnos_carrera = [est.nombre for (_, est) in estudiantes if est.carrera == carrera]
+    println("  $carrera: $(join(alumnos_carrera, ", "))")
+end
